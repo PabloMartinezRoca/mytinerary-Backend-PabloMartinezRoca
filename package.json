@@ -1,0 +1,29 @@
+{
+  "name": "mytinerary-backend-pablomartinezroca",
+  "version": "1.0.0",
+  "description": "Backend de la app mytinerary",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "categories": "node ./models/data/categories.js",
+    "destinations": "node ./models/data/destinations.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PabloMartinezRoca/mytinerary-Backend-PabloMartinezRoca.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PabloMartinezRoca/mytinerary-Backend-PabloMartinezRoca/issues"
+  },
+  "homepage": "https://github.com/PabloMartinezRoca/mytinerary-Backend-PabloMartinezRoca#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.3"
+  }
+}
