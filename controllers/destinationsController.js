@@ -7,7 +7,6 @@ const destinationsController = {
 
         console.log(request.body)
 
-        let destination
         let error = null
         let success = true
 
@@ -15,107 +14,181 @@ const destinationsController = {
             // crea una instancia del modelo, pasando el constructor.
             const newDestination = new Destination(request.body)
             // ejecuta el método Document.save() para insertar el documento almacenado en la instancia en la base de datos.
-            await newDestination.save() 
+            await newDestination.save()
+
+            // Las líneas de arriba pueden reemplazarse por
+            // const newDestination = await Destination.create(request.body)
 
             // visualiza en consola la instancia del documento ya insertado (devuelve createdAt y updatedAt)
             console.log(newDestination)
+
+            response.json({
+                response: newDestination,
+                success,
+                error
+            })
+
         } catch (err) {
             console.log(error)
-            destination = null
             success = false
             error = err
+            next(error) // Invoca al middleware errorHandler
         }
-        
-        response.json({
-            response: destination,
-            success,
-            error
-        })
+
     },
     getAllDestinations: async (request, response, next) => {
 
-        let allDestinations
+        // query params
+
         let error = null
         let success = true
 
         try {
-            allDestinations = await Destination.find()
+            const allDestinations = await Destination.find()
+
+            // Para probar el error, descomentar la siguiente línea
+            // throw new Error("Error forzado por el desarrollador")
+
+            // La respuesta en común se elimina, puesto que en caso de error
+            // se encargaría el middleware de comunicarlo
+            response.json({
+                response: allDestinations, // era destinations para la colección estática de destinos,
+                success,
+                error
+            })
+
         } catch (err) {
-            allDestinations = null
             success = false
             error = err
+            next(error) // Invoca al middleware errorHandler
         }
 
+        /* Se traslada adentro de la estructura try...catch
         response.json({
             response: allDestinations, // era destinations para la colección estática de destinos,
             success,
             error
         })
+        */
     },
-    getDestinationsByCityName: async (request, response, next) => {
-        let { city } = request.params // desestructuración de let city = request.params['city']
-        
-        // const destination = destinations.find(destination => destination.city == city)
+    getDestinationById: async (request, response, next) => {
+        const { _id: id } = request.params // desestructuración de const _id = request.params['_id']
 
-        let findDestination
+        console.log(id)
+
         let error = null
         let success = true
 
         try {
-            findDestination = await Destination.find({
-                city: city
+            const findDestination = await Destination.findById(id) // Es mejor que findByOne({ _id: id }) porque ya está indexado por el id
+
+            response.json({
+                response: findDestination, // era destination para la colección estática de destinos,
+                success,
+                error
             })
         } catch (err) {
-            findDestination = null
             success = false
             error = err
+            next(error)
+        }
+    },
+    getDestinationsByCityName: async (request, response, next) => {
+        let { city } = request.params // desestructuración de let city = request.params['city']
+
+        // const destination = destinations.find(destination => destination.city == city) se usaba con los datos estáticos
+
+        let error = null
+        let success = true
+
+        try {
+            const findDestination = await Destination.find({
+                city: city
+            })
+
+            response.json({
+                response: findDestination, // era destination para la colección estática de destinos,
+                success,
+                error
+            })
+
+        } catch (err) {
+            success = false
+            error = err
+            next(error)
         }
 
-        response.json({
-            response: findDestination, // era destination para la colección estática de destinos,
-            success,
-            error
-        })
     },
     getDestinationsByCountryName: async (request, response, next) => {
         let { country } = request.params // desestructuración de let country = request.params['country']
 
         // const destination = destinations.find(destination => destination.country == country)
 
-        let findDestination
         let error = null
         let success = true
 
         try {
-            findDestination = await Destination.find({
+            const findDestination = await Destination.find({
                 country: country
             })
+
+            response.json({
+                response: findDestination, // era destination para la colección estática de destinos,
+                success,
+                error
+            })
+
         } catch (err) {
-            findDestination = null
             success = false
             error = err
+            next(error)
         }
+    },
+    updateDestination: async (request, response, next) => {
+        const { id } = request.params
+        const fieldsToUpdate = request.body
 
-        response.json({
-            response: findDestination, // era destination para la colección estática de destinos,
-            success,
-            error
-        })
+        let success = true
+        let error = null
+
+        try {
+            // Nótese que un objeto JSON no lleva comillas en sus key, pero aquí es un objeto del método { "city": "Buenos Aires" }. Puede llevar comillas
+            // const update = await Destination.findByIdAndUpdate({ _id: id }, { "city": "Buenos Aires" }, { returnDocument:'after' } )
+
+            const updatedDocument = await Destination.findByIdAndUpdate({ _id: id }, request.body, { returnDocument: 'after' })
+
+            response.json({
+                response: updatedDocument,
+                success,
+                error
+            })
+
+        } catch (err) {
+            success = false,
+                error = err
+            next(error)
+        }
     },
-    getFilteredDestination: (request, response, next) => {
-        let id = request.params['id']
-        response.json({
-            response: destinations[id],
-            success: true,
-            error: null
-        })
-    },
-    getOneDestination: (request, response, next) => {
-        response.json({
-            response: destinations[0],
-            success: true,
-            error: null
-        })
+    deleteDestination: async (request, response, next) => {
+        const { id } = request.params
+
+        let success = true
+        let error = null
+
+        try {
+            const deletedDocument = await Destination.findByIdAndDelete({ _id: id })
+
+            response.json({
+                response: deletedDocument,
+                success,
+                error
+            })
+
+        } catch (err) {
+            success = false,
+                error = err
+            next(error)
+        }
     },
 }
 
