@@ -1,9 +1,9 @@
 // trasladamos esta importación desde indexRouter.js ya que allí ya no es necesaria
-// import destinations from '../data/destinations.js' // importa los datos desde el archivo (estáticamente)
-import Destination from '../models/Destination.js'
+// import cities from '../data/cities.js' // importa los datos desde el archivo (estáticamente)
+import City from '../models/City.js'
 
-const destinationsController = {
-    createOneDestination: async (request, response, next) => {
+const citiesController = {
+    createOneCity: async (request, response, next) => {
 
         console.log(request.body)
 
@@ -12,20 +12,19 @@ const destinationsController = {
 
         try {
             // crea una instancia del modelo, pasando el constructor.
-            const newDestination = new Destination(request.body)
+            const newCity = new City(request.body)
             // ejecuta el método Document.save() para insertar el documento almacenado en la instancia en la base de datos.
-            await newDestination.save()
+            await newCity.save()
 
             // Las líneas de arriba pueden reemplazarse por
-            // const newDestination = await Destination.create(request.body)
+            // const newCity = await City.create(request.body)
 
             // visualiza en consola la instancia del documento ya insertado (devuelve createdAt y updatedAt)
-            console.log(newDestination)
+            console.log(newCity)
 
             response.json({
-                response: newDestination,
-                success,
-                error
+                response: newCity,
+                success
             })
 
         } catch (err) {
@@ -36,7 +35,7 @@ const destinationsController = {
         }
 
     },
-    getAllDestinations: async (request, response, next) => {
+    getAllCities: async (request, response, next) => {
 
         // query params
 
@@ -44,7 +43,7 @@ const destinationsController = {
         let success = true
 
         try {
-            const allDestinations = await Destination.find()
+            const allCities = await City.find()
 
             // Para probar el error, descomentar la siguiente línea
             // throw new Error("Error forzado por el desarrollador")
@@ -52,9 +51,8 @@ const destinationsController = {
             // La respuesta en común se elimina, puesto que en caso de error
             // se encargaría el middleware de comunicarlo
             response.json({
-                response: allDestinations, // era destinations para la colección estática de destinos,
-                success,
-                error
+                response: allCities, // era cities para la colección estática de destinos,
+                success
             })
 
         } catch (err) {
@@ -65,14 +63,14 @@ const destinationsController = {
 
         /* Se traslada adentro de la estructura try...catch
         response.json({
-            response: allDestinations, // era destinations para la colección estática de destinos,
+            response: allCities, // era cities para la colección estática de destinos,
             success,
             error
         })
         */
     },
-    getDestinationById: async (request, response, next) => {
-        const { _id: id } = request.params // desestructuración de const _id = request.params['_id']
+    getCityById: async (request, response, next) => {
+        const { id } = request.params // desestructuración de const _id = request.params['_id']
 
         console.log(id)
 
@@ -80,12 +78,11 @@ const destinationsController = {
         let success = true
 
         try {
-            const findDestination = await Destination.findById(id) // Es mejor que findByOne({ _id: id }) porque ya está indexado por el id
-
+            const findCity = await City.findById(id) // Es mejor que findByOne({ _id: id }) porque ya está indexado por el id
+            
             response.json({
-                response: findDestination, // era destination para la colección estática de destinos,
-                success,
-                error
+                response: findCity, // era city para la colección estática de destinos,
+                success
             })
         } catch (err) {
             success = false
@@ -93,23 +90,22 @@ const destinationsController = {
             next(error)
         }
     },
-    getDestinationsByCityName: async (request, response, next) => {
+    getCitiesByCityName: async (request, response, next) => {
         let { city } = request.params // desestructuración de let city = request.params['city']
 
-        // const destination = destinations.find(destination => destination.city == city) se usaba con los datos estáticos
+        // const city = cities.find(city => city.city == city) se usaba con los datos estáticos
 
         let error = null
         let success = true
 
         try {
-            const findDestination = await Destination.find({
+            const findCity = await City.find({
                 city: city
             })
 
             response.json({
-                response: findDestination, // era destination para la colección estática de destinos,
-                success,
-                error
+                response: findCity, // era city para la colección estática de destinos,
+                success
             })
 
         } catch (err) {
@@ -119,23 +115,22 @@ const destinationsController = {
         }
 
     },
-    getDestinationsByCountryName: async (request, response, next) => {
+    getCitiesByCountryName: async (request, response, next) => {
         let { country } = request.params // desestructuración de let country = request.params['country']
 
-        // const destination = destinations.find(destination => destination.country == country)
+        // const city = cities.find(city => city.country == country)
 
         let error = null
         let success = true
 
         try {
-            const findDestination = await Destination.find({
+            const findCity = await City.find({
                 country: country
             })
 
             response.json({
-                response: findDestination, // era destination para la colección estática de destinos,
-                success,
-                error
+                response: findCity, // era city para la colección estática de destinos,
+                success
             })
 
         } catch (err) {
@@ -144,7 +139,7 @@ const destinationsController = {
             next(error)
         }
     },
-    updateDestination: async (request, response, next) => {
+    updateCity: async (request, response, next) => {
         const { id } = request.params
         const fieldsToUpdate = request.body
 
@@ -153,14 +148,13 @@ const destinationsController = {
 
         try {
             // Nótese que un objeto JSON no lleva comillas en sus key, pero aquí es un objeto del método { "city": "Buenos Aires" }. Puede llevar comillas
-            // const update = await Destination.findByIdAndUpdate({ _id: id }, { "city": "Buenos Aires" }, { returnDocument:'after' } )
+            // const update = await City.findByIdAndUpdate({ _id: id }, { "city": "Buenos Aires" }, { returnDocument:'after' } )
 
-            const updatedDocument = await Destination.findByIdAndUpdate({ _id: id }, request.body, { returnDocument: 'after' })
+            const updatedDocument = await City.findByIdAndUpdate({ _id: id }, request.body, { returnDocument: 'after' })
 
             response.json({
                 response: updatedDocument,
-                success,
-                error
+                success
             })
 
         } catch (err) {
@@ -169,19 +163,18 @@ const destinationsController = {
             next(error)
         }
     },
-    deleteDestination: async (request, response, next) => {
+    deleteCity: async (request, response, next) => {
         const { id } = request.params
 
         let success = true
         let error = null
 
         try {
-            const deletedDocument = await Destination.findByIdAndDelete({ _id: id })
+            const deletedDocument = await City.findByIdAndDelete({ _id: id })
 
             response.json({
                 response: deletedDocument,
-                success,
-                error
+                success
             })
 
         } catch (err) {
@@ -192,4 +185,4 @@ const destinationsController = {
     },
 }
 
-export default destinationsController
+export default citiesController

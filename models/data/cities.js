@@ -1,8 +1,8 @@
 import 'dotenv/config.js' 
 import '../../environment/dbConnection.js' 
-import Destination from '../Destination.js'
+import City from '../City.js'
 
-let destinations = [
+let cities = [
     {
         city: "Buenos Aires",
         country: "Argentina",
@@ -65,4 +65,4 @@ let destinations = [
     }
 ]
 
-Destination.insertMany(destinations)
+City.insertMany(cities)

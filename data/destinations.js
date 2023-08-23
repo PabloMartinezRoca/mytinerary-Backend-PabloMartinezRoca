@@ -1,4 +1,4 @@
-const destinations = [
+const cities = [
     {
         "city": "Buenos Aires",
         "country": "Argentina",
@@ -7,12 +7,12 @@ const destinations = [
     {
         "city": "Cartagena",
         "country": "Colombia",
-        "imgUrl": "Cartagena-Colombia.jpg"
+        "imgUrl": "Cartagena-Colombia.webp"
     },
     {
         "city": "Rio de Janeiro",
         "country": "Brazil",
-        "imgUrl": "Rio-de-Janeiro-Brasil.webp"
+        "imgUrl": "Rio-do-Janeiro-Brazil.webp"
     },
     {
         "city": "New York",
@@ -22,7 +22,7 @@ const destinations = [
     {
         "city": "Bruges",
         "country": "Belgium",
-        "imgUrl": "Bruges-Belgium.jpg"
+        "imgUrl": "Bruges-Belgium.webp"
     },
     {
         "city": "London",
@@ -52,13 +52,28 @@ const destinations = [
     {
         "city": "Marina Bay",
         "country": "Singapore",
-        "imgUrl": "Marina-Bay-Singapore.jpg"
+        "imgUrl": "Marina-Bay-Singapore.webp"
     },
     {
         "city": "Shanghai",
         "country": "China",
         "imgUrl": "Shanghai-China.webp"
+    },
+    {
+        "city": "Paris",
+        "country": "France",
+        "imgUrl": "Paris-France.webp"
+    },
+    {
+        "city": "Barcelona",
+        "country": "Spain",
+        "imgUrl": "Park-Guell-Barcelona-Spain.webp"
+    },
+    {
+        "city": "Venice",
+        "country": "Italy",
+        "imgUrl": "Venice-Italy.webp"
     }
 ]
 
-export default destinations
+export default cities

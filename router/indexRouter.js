@@ -1,26 +1,53 @@
 import { Router } from 'express'
-import destinationsRouter from './destinationsRouter.js'
+import citiesRouter from './citiesRouter.js'
+import categoriesRouter from './categoriesRouter.js'
 import errorHandler from '../middlewares/errorHandler.js'
 import notFoundHandler from '../middlewares/notFoundHandler.js'
 
+const message = "Welcome to mytinerary's backend API Server in "
+
+function getRequestInfo(url) {
+    return "Se ha hecho una petición al backend a la ruta " + url + " a las " + new Date().toLocaleTimeString() + " del " + new Date().toLocaleDateString(('es-AR').split('/').reverse().join('/'))
+}
+
 const indexRouter = Router()
 
-indexRouter.use('/api', (request, response, next) => {
-    // esta función middleware se ejecuta antes de llegar al ruter, 
-    // antes de llegar al controlador, 
-    // y que el controlador devuelva una respuesta.
-    console.log("Se ha hecho una petición al backend a la ruta", request.url, "a las", new Date().toLocaleTimeString(), "del", new Date().toLocaleDateString(('es-AR').split('/').reverse().join('/')))
+// request : es un objeto que tiene toda la información de la solicitud que se hace al servidor
+// response : es un objeto que tiene métodos y propiedades que se envía al cliente que hace la solicitud
+// next() : es un método que se ejecuta para pasar a la siguiente función en la lista, es invocado por el next(error) del catch (error)
+
+// URL '/'
+indexRouter.get('/', (request, response, next) => { // ruta, callback
+
+    // esta función middleware se ejecuta antes de llegar al ruter, antes de llegar al controlador, y que el controlador devuelva una respuesta.
+    console.log(getRequestInfo(request.url))
+
+    response.send(message + '/')
+}) // si se desea implementar el middleware para manejo de error, incluir ', errorHandler' al final
+
+// URL '/api/'
+indexRouter.get('/api/', (request, response, next) => { // ruta, callback
+
+    console.log(getRequestInfo(request.url))
+
+    response.send(message + '/api/')
+})
+
+// URL '/api/cities'
+indexRouter.use('/api/cities/', (request, response, next) => {
+
+    console.log(getRequestInfo(request.url))
     next()
 }
-, destinationsRouter) // si se desea implementar el middleware para manejo de error, incluir ', errorHandler' al final
+    , citiesRouter)
 
-indexRouter.get('/', (request, response, next) => { // ruta, callback
-    // request : es un objeto que tiene toda la información de la solicitud que se hace al servidor
-    // response : es un objeto que tiene métodos y propiedades que se envía al cliente que hace la solicitud
-    // next() : es un método que se ejecuta para pasar a la siguiente función en la lista
+// URL '/api/categories'
+indexRouter.use('/api/categories/', (request, response, next) => {
 
-    response.send('Bienvenido a mi servidor en /') // es la URL /api/ 
-}) 
+    console.log(getRequestInfo(request.url))
+    next()
+}
+    , categoriesRouter)
 
 indexRouter.use(notFoundHandler) // Debe ir siempre antes que errorHandler. Genera el error para ser interpretado por errorHandler en la siguiente línea
 indexRouter.use(errorHandler) // Aquí se implementa el middleware para manejo de error de manera generalizada. Es aplicable a cualquier petición.
