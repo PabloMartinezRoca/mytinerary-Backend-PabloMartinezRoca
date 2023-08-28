@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import citiesRouter from './citiesRouter.js'
 import categoriesRouter from './categoriesRouter.js'
+import countriesRouter from './countriesRouter.js'
+import continentsRouter from './continentsRouter.js'
 import errorHandler from '../middlewares/errorHandler.js'
 import notFoundHandler from '../middlewares/notFoundHandler.js'
 
@@ -40,6 +42,22 @@ indexRouter.use('/api/cities/', (request, response, next) => {
     next()
 }
     , citiesRouter)
+
+// URL '/api/countries'
+indexRouter.use('/api/countries/', (request, response, next) => {
+
+    console.log(getRequestInfo(request.url))
+    next()
+}
+    , countriesRouter)
+
+// URL '/api/continents'
+indexRouter.use('/api/continents/', (request, response, next) => {
+
+    console.log(getRequestInfo(request.url))
+    next()
+}
+    , continentsRouter)
 
 // URL '/api/categories'
 indexRouter.use('/api/categories/', (request, response, next) => {

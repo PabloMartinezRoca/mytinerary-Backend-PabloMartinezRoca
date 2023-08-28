@@ -1,8 +1,9 @@
-import 'dotenv/config.js' 
-import '../../environment/dbConnection.js' 
+import 'dotenv/config.js'
+import '../../environment/dbConnection.js'
 import City from '../City.js'
+import Country from '../Country.js';
 
-let cities = [
+const cities = [
     {
         city: "Buenos Aires",
         country: "Argentina",
@@ -65,4 +66,32 @@ let cities = [
     }
 ]
 
-City.insertMany(cities)
+async function updateCountryId() {
+
+    let error = null
+    let success = true
+
+    try {
+
+        const countries = await Country.find()
+
+        const UpdatedCities = cities.map(city => {
+
+            const countryId = countries.find(country => country.country == city.country);
+
+            if (countryId) {
+                city.country = countryId._id
+            }
+            return city
+        })
+
+        // Insert the updated documents into the target collection
+        await City.insertMany(UpdatedCities);
+
+    } catch (err) {
+        success = false
+        error = err
+    }
+}
+
+updateCountryId();

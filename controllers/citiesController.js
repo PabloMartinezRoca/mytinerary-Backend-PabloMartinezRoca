@@ -1,6 +1,8 @@
 // trasladamos esta importación desde indexRouter.js ya que allí ya no es necesaria
-// import cities from '../data/cities.js' // importa los datos desde el archivo (estáticamente)
+// import cities from '../staticData/cities.js' // importa los datos desde el archivo (estáticamente)
 import City from '../models/City.js'
+import Country from '../models/Country.js'
+import Continents from '../models/Continent.js'
 
 const citiesController = {
     createOneCity: async (request, response, next) => {
@@ -11,13 +13,18 @@ const citiesController = {
         let success = true
 
         try {
+            const country = await Country.findOne({ country: request.body.country })
+
+            const query = { ... request.body }
+            query.country = country._id
+
             // crea una instancia del modelo, pasando el constructor.
-            const newCity = new City(request.body)
+            // const newCity = new City(request.body)
             // ejecuta el método Document.save() para insertar el documento almacenado en la instancia en la base de datos.
-            await newCity.save()
+            // await newCity.save()
 
             // Las líneas de arriba pueden reemplazarse por
-            // const newCity = await City.create(request.body)
+            const newCity = await City.create(query) 
 
             // visualiza en consola la instancia del documento ya insertado (devuelve createdAt y updatedAt)
             console.log(newCity)
@@ -43,7 +50,10 @@ const citiesController = {
         let success = true
 
         try {
-            const allCities = await City.find()
+            const allCities = await City.find().populate( {
+                path: 'country',
+                select: 'country continent -_id'
+            } ).sort({ city: 'asc' })
 
             // Para probar el error, descomentar la siguiente línea
             // throw new Error("Error forzado por el desarrollador")

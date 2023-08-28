@@ -8,7 +8,9 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "categories": "node ./models/data/categories.js",
-    "cities": "node ./models/data/cities.js"
+    "cities": "node ./models/data/dataCities.js",
+    "countries": "node ./models/data/dataCountries.js",
+    "continents": "node ./models/data/dataContinents.js"
   },
   "repository": {
     "type": "git",
