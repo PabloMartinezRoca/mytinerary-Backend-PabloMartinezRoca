@@ -15,7 +15,7 @@ const citiesController = {
         try {
             const country = await Country.findOne({ country: request.body.country })
 
-            const query = { ... request.body }
+            const query = { ...request.body }
             query.country = country._id
 
             // crea una instancia del modelo, pasando el constructor.
@@ -24,7 +24,7 @@ const citiesController = {
             // await newCity.save()
 
             // Las líneas de arriba pueden reemplazarse por
-            const newCity = await City.create(query) 
+            const newCity = await City.create(query)
 
             // visualiza en consola la instancia del documento ya insertado (devuelve createdAt y updatedAt)
             console.log(newCity)
@@ -50,10 +50,30 @@ const citiesController = {
         let success = true
 
         try {
-            const allCities = await City.find().populate( {
+            let findCity = await City.find().populate({
                 path: 'country',
-                select: 'country continent -_id'
-            } ).sort({ city: 'asc' })
+                select: 'country continent -_id',
+                populate: {
+                    path: 'continent',
+                    model: 'continents',
+                    select: 'continent -_id', // Select only the 'username' field of the author
+                },
+
+            }).sort({ city: 'asc' })
+
+            findCity = findCity.map(city => {
+
+                const { country, continent } = city.country;
+                const updatedCity = {
+                    ...city._doc,
+                    continent: continent.continent,
+                    country: country
+                }
+                return updatedCity;
+            });
+
+
+
 
             // Para probar el error, descomentar la siguiente línea
             // throw new Error("Error forzado por el desarrollador")
@@ -61,7 +81,7 @@ const citiesController = {
             // La respuesta en común se elimina, puesto que en caso de error
             // se encargaría el middleware de comunicarlo
             response.json({
-                response: allCities, // era cities para la colección estática de destinos,
+                response: findCity, // era cities para la colección estática de destinos,
                 success
             })
 
@@ -73,7 +93,7 @@ const citiesController = {
 
         /* Se traslada adentro de la estructura try...catch
         response.json({
-            response: allCities, // era cities para la colección estática de destinos,
+            response: findCity, // era cities para la colección estática de destinos,
             success,
             error
         })
@@ -82,16 +102,34 @@ const citiesController = {
     getCityById: async (request, response, next) => {
         const { id } = request.params // desestructuración de const _id = request.params['_id']
 
-        console.log(id)
-
         let error = null
         let success = true
 
         try {
-            const findCity = await City.findById(id) // Es mejor que findByOne({ _id: id }) porque ya está indexado por el id
+            // Es mejor que findByOne({ _id: id }) porque ya está indexado por el id
+            let city = await City.findById(id).populate({
+                path: 'country',
+                select: '-_id',
+                populate: {
+                    path: 'continent',
+                    model: 'continents',
+                    select: '-_id', // Select only the 'username' field of the author
+                },
+
+            }).sort({ city: 'asc' })
+
+            const { country, continent } = city.country;
+            city = {
+                ...city.country._doc,
+                ...city._doc,
+                continent: continent.continent,
+                country: country
+            }
+
+            console.log(city)
             
             response.json({
-                response: findCity, // era city para la colección estática de destinos,
+                response: city, // era city para la colección estática de destinos,
                 success
             })
         } catch (err) {

@@ -12,12 +12,12 @@ const cities = [
     {
         city: "Cartagena",
         country: "Colombia",
-        imgUrl: "Cartagena-Colombia.jpg"
+        imgUrl: "Cartagena-Colombia.webp"
     },
     {
         city: "Rio de Janeiro",
         country: "Brazil",
-        imgUrl: "Rio-de-Janeiro-Brasil.webp"
+        imgUrl: "Rio-de-Janeiro-Brazil.webp"
     },
     {
         city: "New York",
@@ -27,7 +27,7 @@ const cities = [
     {
         city: "Bruges",
         country: "Belgium",
-        imgUrl: "Bruges-Belgium.jpg"
+        imgUrl: "Bruges-Belgium.webp"
     },
     {
         city: "London",
@@ -46,7 +46,7 @@ const cities = [
     },
     {
         city: "Seoul",
-        country: "Korea",
+        country: "Republic of Korea",
         imgUrl: "Seoul-Korea.webp"
     },
     {
@@ -56,8 +56,8 @@ const cities = [
     },
     {
         city: "Marina Bay",
-        country: "Singapore",
-        imgUrl: "Marina-Bay-Singapore.jpg"
+        country: "Republic of Singapore",
+        imgUrl: "Marina-Bay-Singapore.webp"
     },
     {
         city: "Shanghai",
