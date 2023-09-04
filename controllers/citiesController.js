@@ -13,10 +13,40 @@ const citiesController = {
         let success = true
 
         try {
-            const country = await Country.findOne({ country: request.body.country })
 
-            const query = { ...request.body }
-            query.country = country._id
+            let cityData = { ...request.body }
+
+            // Chequea si la nueva ciudad pertenece a un nuevo país
+            if (cityData.newCountry) {
+
+                if (!cityData.newCountryName) { // No hay data del país
+
+                    err = "Country_not_defined"
+                    throw new error(err)
+
+                    // Con el throw.... es necesario agregar el else?
+                } else { // Chequea si existe el país. Si no, lo crea
+
+                    let countryQuery = {
+                        country: { $regex: cityData.newCountryName.trim(), $options: "i" },
+                        continent: cityData.continent
+                    }
+                    const findCountry = await Country.findOne(countryQuery)
+
+                    if (!findCountry) {
+
+                        // Crea el país
+                        // TO DO : VER EL SCHEMA Y ARMAR EN CONSECUENCIA countryQuery
+                        const newCountry = await City.create(countryData)
+                        cityData.country = newCountry._id
+
+                    } else {
+                        cityData.country = findCountry._id
+                    }
+                }
+            }
+
+            // Crea la ciudad
 
             // crea una instancia del modelo, pasando el constructor.
             // const newCity = new City(request.body)
@@ -24,7 +54,7 @@ const citiesController = {
             // await newCity.save()
 
             // Las líneas de arriba pueden reemplazarse por
-            const newCity = await City.create(query)
+            const newCity = await City.create(cityData)
 
             // visualiza en consola la instancia del documento ya insertado (devuelve createdAt y updatedAt)
             console.log(newCity)
@@ -127,7 +157,7 @@ const citiesController = {
             }
 
             console.log(city)
-            
+
             response.json({
                 response: city, // era city para la colección estática de destinos,
                 success
@@ -139,17 +169,22 @@ const citiesController = {
         }
     },
     getCitiesByCityName: async (request, response, next) => {
-        let { city } = request.params // desestructuración de let city = request.params['city']
-
+        let query = {}
+        console.log(request.params.city)
+        if (Object.keys(request.params).length) {
+            // query.city = { $regex: request.params.city.trim(), $options: "i" } // desestructuración de let city = request.params['city']
+            query.city = { $regex: `^${request.params.city.trim()}`, $options: "i" } // Encuentra documentos que empiezan con el parámetro
+        } else if (Object.keys(request.query).length) {
+            // query.city = { $regex: request.query.city.trim(), $options: "i" }
+            query.city = { $regex: `^${request.query.city.trim()}`, $options: "i" } // Encuentra documentos que empiezan con el parámetro
+        }
         // const city = cities.find(city => city.city == city) se usaba con los datos estáticos
 
         let error = null
         let success = true
 
         try {
-            const findCity = await City.find({
-                city: city
-            })
+            const findCity = await City.find( query )
 
             response.json({
                 response: findCity, // era city para la colección estática de destinos,
