@@ -1,5 +1,4 @@
-// Validador específico - Solo de ejemplo - no se utiliza
-
+import { signInSchema } from "../validators/signInValidator.js"
 import { signUpSchema } from "../validators/signUpValidator.js"
 
 const dataValidator = (schema) => (request, response, next) => {

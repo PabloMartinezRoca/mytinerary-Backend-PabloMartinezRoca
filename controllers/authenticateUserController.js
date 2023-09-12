@@ -1,8 +1,21 @@
 import bcrypt from 'bcryptjs'
 import User from '../models/Users.js'
 import Country from '../models/Country.js'
+import jwt from 'jsonwebtoken'
 
 const authenticateUserController = {
+
+    loginWithToken: (request, response) => {
+        const userData = { ...request.user._doc }
+        delete userData.pass
+
+        response.status(200).json({ 
+            success: true,
+            userData: userData,
+            body: request.body,
+            message: 'Sign in successfully'
+        })
+    },
 
     signUp: async (request, response, next) => {
 
@@ -37,9 +50,13 @@ const authenticateUserController = {
         try {
 
             const newUser = await User.create(newUserData)
-            return response.status(201).json({
+
+            const token = jwt.sign( { email: newUser.email, photo: newUser.photo }, process.env.SECRET_KEY, { expiresIn: '1h' } ) // Crea y firma el token // SECRET_KEY en .env
+
+            return response.status(201).json({ // Create user and login at once
                 success: true,
                 userDate: newUser,
+                token: token,
                 message: 'SIGN_UP_SUCCESSFULLY'
             })
 
@@ -52,23 +69,28 @@ const authenticateUserController = {
 
     signIn: async (request, response, next) => {
         try {
-            let { email, password } = request.body
+            let { email: checkEmail , pass: checkPassword } = request.body
 
-            const userExists = await User.findOne({ email })
+            const userFound = await User.findOne({ email: checkEmail })
 
-            if (!userExists) {
+            if (!userFound) {
                 throw new Error("No user exists with this email")
             }
 
-            let passwordValidated = bcrypt.compareSync(password, userExists.password)
+            let passwordValidated = bcrypt.compareSync(checkPassword, userFound.pass)
 
             if (!passwordValidated) {
                 throw new Error("The email/password is incorrect")
             }
 
+            let { email, photo, dateOfBirth } = userFound
+
+            const token = jwt.sign( { checkEmail, photo }, process.env.SECRET_KEY, { expiresIn: '1h' } ) // Crea y firma el token // SECRET_KEY en .env
+
             return response.status(200).json({
                 success: true,
-                userData: userExists,
+                userData: { email, photo, dateOfBirth },
+                token: token,
                 message: 'Sign in successfully'
             })
 
