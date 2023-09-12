@@ -7,57 +7,68 @@ const cities = [
     {
         city: "Buenos Aires",
         country: "Argentina",
-        imgUrl: "Buenos-Aires-Argentina.webp"
+        imgUrl: "Buenos-Aires-Argentina.webp",
+        popular: true
     },
     {
         city: "Cartagena",
         country: "Colombia",
-        imgUrl: "Cartagena-Colombia.webp"
+        imgUrl: "Cartagena-Colombia.webp",
+        popular: true
     },
     {
         city: "Rio de Janeiro",
         country: "Brazil",
-        imgUrl: "Rio-de-Janeiro-Brazil.webp"
+        imgUrl: "Rio-de-Janeiro-Brazil.webp",
+        popular: true
     },
     {
         city: "New York",
         country: "USA",
-        imgUrl: "New-York-USA.webp"
+        imgUrl: "New-York-USA.webp",
+        popular: true
     },
     {
         city: "Bruges",
         country: "Belgium",
-        imgUrl: "Bruges-Belgium.webp"
+        imgUrl: "Bruges-Belgium.webp",
+        popular: true
     },
     {
         city: "London",
         country: "England",
-        imgUrl: "London-England.webp"
+        imgUrl: "London-England.webp",
+        popular: true
     },
     {
         city: "Madrid",
         country: "Spain",
-        imgUrl: "Madrid-Spain.webp"
+        imgUrl: "Madrid-Spain.webp",
+        popular: true
     },
     {
         city: "Rome",
         country: "Italy",
-        imgUrl: "Rome-Italy.webp"
+        imgUrl: "Rome-Italy.webp",
+        popular: true
     },
     {
         city: "Seoul",
         country: "Republic of Korea",
-        imgUrl: "Seoul-Korea.webp"
+        imgUrl: "Seoul-Korea.webp",
+        popular: true
     },
     {
         city: "Fuji Mountain",
         country: "Japan",
-        imgUrl: "Fuji-Mountain-Japan.webp"
+        imgUrl: "Fuji-Mountain-Japan.webp",
+        popular: true
     },
     {
         city: "Marina Bay",
         country: "Republic of Singapore",
-        imgUrl: "Marina-Bay-Singapore.webp"
+        imgUrl: "Marina-Bay-Singapore.webp",
+        popular: true
     },
     {
         city: "Shanghai",

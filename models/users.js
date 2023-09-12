@@ -1,23 +1,23 @@
 import { Schema, model, Types } from "mongoose"
 
-const collection = 'users'
+const collection = 'users';
 
 const usersSchema = new Schema( // mongoose.Schema si no deconstruimos import mongoose from "mongoose"
     { 
-        email: { type: String, required: true },
-        user: { type: String, required: true },
+        email: { type: String, required: true, unique: true },
         pass: { type: String, required: true },
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
-        dateOfBirth: { type: Date, required: true },
+        dateOfBirth: { type: Date },
         country: { type: Schema.Types.ObjectId, ref: 'countries', required: true },
-        photo: { type: String, required: true },
-        memberSince: { type: Date, required: true }
+        photo: { type: String, default: 'https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Images.png' },
+        memberSince: { type: Date, required: true },
+        verified: { type: Boolean, default: false }
     },
     {
         timestamps: true
-    })
+    })  
 
-const Users = model(collection, usersSchema)
+const User = model(collection, usersSchema)
 
-export default Users
+export default User

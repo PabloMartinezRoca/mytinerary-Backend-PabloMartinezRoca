@@ -5,6 +5,7 @@ import countriesRouter from './countriesRouter.js'
 import continentsRouter from './continentsRouter.js'
 import errorHandler from '../middlewares/errorHandler.js'
 import notFoundHandler from '../middlewares/notFoundHandler.js'
+import authenticateUserRouter from './authenticateUserRouter.js'
 
 const message = "Welcome to mytinerary's backend API Server in "
 
@@ -66,6 +67,14 @@ indexRouter.use('/api/categories/', (request, response, next) => {
     next()
 }
     , categoriesRouter)
+
+// URL user authenticator
+indexRouter.use('/api/auth/', (request, response, next) => {
+    console.log(message + '/api/auth/')
+    console.log(getRequestInfo(request.url))
+    next()
+}
+    , authenticateUserRouter)
 
 indexRouter.use(notFoundHandler) // Debe ir siempre antes que errorHandler. Genera el error para ser interpretado por errorHandler en la siguiente línea
 indexRouter.use(errorHandler) // Aquí se implementa el middleware para manejo de error de manera generalizada. Es aplicable a cualquier petición.

@@ -6,6 +6,7 @@ const citySchema = new Schema({ // mongoose.Schema si no deconstruimos import mo
     city: { type: String, required: true },
     country: { type: Schema.Types.ObjectId, ref: 'countries', required: true },
     imgUrl: { type: String, required: true },
+    popular: { type: Boolean, required: true, default: false },
     created_by: { type: Types.ObjectId, ref: 'users' },
     activities: [{ type: Schema.Types.ObjectId, ref: '', required: false }]
 },

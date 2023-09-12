@@ -7,6 +7,7 @@ import indexRouter from './router/indexRouter.js'
 const server = express() // genera una instancia de express y devuelve un servidor
 const ready = () => { console.log("Server running... Listening on port " + process.env.PORT) }
 
+// Middlewares
 server.use(cors()) // el middleware debe implementarse antes que el router  
 server.use(express.json()) // el middleware debe implementarse antes que el router  
 
