@@ -58,7 +58,7 @@ const signUpSchema = joi.object({
           /https?:/,
         ],
       })
-      .regex(/^https:\/\/lh3\.googleusercontent\.com\/[a-zA-Z0-9\/\-=]+(\.(jpg|webp|jpeg|png|gif|bmp))?$/i)
+      /* .regex(/\.(jpg|webp|jpeg|png|gif|bmp)$/i) */
       .label('URL Profile Photo')
       .messages({
         'string.base': 'The {{#label}} field must be valid.',

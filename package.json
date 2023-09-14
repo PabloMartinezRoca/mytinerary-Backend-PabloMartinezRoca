@@ -10,7 +10,8 @@
     "categories": "node ./models/data/categories.js",
     "cities": "node ./models/data/dataCities.js",
     "countries": "node ./models/data/dataCountries.js",
-    "continents": "node ./models/data/dataContinents.js"
+    "continents": "node ./models/data/dataContinents.js",
+    "itineraries": "node ./models/data/dataItinerariesAndActivities.js"
   },
   "repository": {
     "type": "git",

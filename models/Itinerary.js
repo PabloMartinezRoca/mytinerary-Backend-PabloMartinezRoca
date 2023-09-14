@@ -2,8 +2,10 @@ import { Schema, model, Types } from "mongoose"
 
 const collection = 'itineraries'
 
-const itinerariesSchema = new Schema({ // mongoose.Schema si no deconstruimos import mongoose from "mongoose"
+const schema = new Schema({ // mongoose.Schema si no deconstruimos import mongoose from "mongoose"
+    city: { type: Schema.Types.ObjectId, ref: 'cities', required: true },
     title: { type: String, required: true },
+    photo: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'users', required: true },
     price: { type: Number, required: true },
     duration: { type: Number, required: true },
@@ -20,6 +22,6 @@ const itinerariesSchema = new Schema({ // mongoose.Schema si no deconstruimos im
         timestamps: true
     })
 
-const Itineraries = model(collection, itinerariesSchema)
+const Itinerary = model(collection, schema)
 
-export default Itineraries
+export default Itinerary
