@@ -170,7 +170,9 @@ const citiesController = {
     },
     getCitiesByCityName: async (request, response, next) => {
         let query = {}
+        
         console.log(request.params.city)
+        
         if (Object.keys(request.params).length) {
             // query.city = { $regex: request.params.city.trim(), $options: "i" } // desestructuración de let city = request.params['city']
             query.city = { $regex: `^${request.params.city.trim()}`, $options: "i" } // Encuentra documentos que empiezan con el parámetro
@@ -184,7 +186,27 @@ const citiesController = {
         let success = true
 
         try {
-            const findCity = await City.find( query )
+            let findCity = await City.find( query ).populate({
+                path: 'country',
+                select: 'country continent -_id',
+                populate: {
+                    path: 'continent',
+                    model: 'continents',
+                    select: 'continent -_id', // Select only the 'username' field of the author
+                },
+
+            }).sort({ city: 'asc' })
+
+            findCity = findCity.map(city => {
+
+                const { country, continent } = city.country;
+                const updatedCity = {
+                    ...city._doc,
+                    continent: continent.continent,
+                    country: country
+                }
+                return updatedCity;
+            });
 
             response.json({
                 response: findCity, // era city para la colección estática de destinos,

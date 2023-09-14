@@ -61,15 +61,15 @@ const authenticateUserController = {
 
             const token = jwt.sign( { email: newUser.email, photo: newUser.photo }, process.env.SECRET_KEY, { expiresIn: '1h' } ) // Crea y firma el token // SECRET_KEY en .env
 
-            return response.status(201).json({ // Create user and login at once
+            return response.status(200).json({ // Create user and login at once
                 success: true,
-                userDate: newUser,
+                userData: newUser,
                 token: token,
                 message: 'SIGN_UP_SUCCESSFULLY'
             })
 
         } catch (err) {
-            console.log(err)
+            console.log(err);
             response.send(err)
             next(err)
         }
@@ -86,27 +86,28 @@ const authenticateUserController = {
             }
 
             // Check if login was made with a google account
-            const pass = checkPassword === "LOGIN_by_GOOGLE_2023" ? "Auth_by_Google_Oauth2!" : checkPassword
+            const pass = checkPassword === "LOGIN_by_GOOGLE_2023" ? process.env.GOOGLE_SECRET_DEFAULT_PASS : checkPassword
             let passwordValidated = bcrypt.compareSync(pass, userFound.pass)
 
             if (!passwordValidated) {
                 throw new Error("The email/password is incorrect")
             }
 
-            let { email, photo, dateOfBirth } = userFound
+            let { email, photo } = userFound
 
             const token = jwt.sign( { checkEmail, photo }, process.env.SECRET_KEY, { expiresIn: '1h' } ) // Crea y firma el token // SECRET_KEY en .env
 
             return response.status(200).json({
                 success: true,
-                userData: { email, photo, dateOfBirth },
+                userData: userFound,
                 token: token,
                 message: 'Sign in successfully'
             })
 
-        } catch (error) {
-            console.log(error);
-            next(error)
+        } catch (err) {
+            console.log(err);
+            response.send(err)
+            next(err)
         }
     }
 }

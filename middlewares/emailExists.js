@@ -9,7 +9,7 @@ const emailExists = async (request, response, next) => {
     } 
     return response.status(400).json({
         success: false,
-        message: "Email already exists."
+        message: "EMAIL_ALREADY_EXISTS"
     })
 }
 
