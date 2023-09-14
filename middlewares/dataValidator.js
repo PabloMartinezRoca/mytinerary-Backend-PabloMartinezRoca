@@ -9,6 +9,7 @@ const dataValidator = (schema) => (request, response, next) => {
         console.log(validation)
         return response.json(validation.error)
     }
+    console.log("Data validated!")
     return next()
 }
 

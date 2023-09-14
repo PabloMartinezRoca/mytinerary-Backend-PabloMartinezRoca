@@ -13,40 +13,48 @@ const authenticateUserController = {
             success: true,
             userData: userData,
             body: request.body,
-            message: 'Sign in successfully'
+            message: 'SIGN_IN_SUCCESSFULLY'
         })
     },
 
     signUp: async (request, response, next) => {
 
+        // Check if login was made with a google account
+        const pass = request.body.pass === "LOGIN_by_GOOGLE_2023" ? "Auth_by_Google_Oauth2!" : request.body.pass
+
         // Password encryptation
-        const passwordHash = bcrypt.hashSync(request.body.pass, 10)
+        const passwordHash = bcrypt.hashSync(pass, 10)
         // console.log(passwordHash)
+        
         let body = { ...request.body }
         body.pass = passwordHash
 
-        // get Country Id or insert new Country
-        let countryId
-
-        await Country.findOne({ country: body.country })
-            .select('_id') // Select only the '_id' field
-            .then(country => {
-                if (country) {
-                    countryId = country._id;
-                } else {
-                    console.log("NO COUNTRY FOUND")
-                    // TO DO : insert new Country
-                }
-            })
-            .catch(err => {
-                console.error('Error:', err);
-            });
-
-        const newUserData = {
-            ...body,
-            country: countryId
+        let newUserData = {
+            ...body
         }
+        if (false && body.country) { // TO DO : get Country Id or insert new Country on the fly
+            let countryId
 
+            await Country.findOne({ country: body.country })
+                .select('_id') // Select only the '_id' field
+                .then(country => {
+                    if (country) {
+                        countryId = country._id;
+                    } else {
+                        console.log("NO COUNTRY FOUND")
+                        // TO DO : insert new Country
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                });
+
+            newUserData = {
+                ...newUserData,
+                country: countryId
+            }
+        }
+        
         try {
 
             const newUser = await User.create(newUserData)
@@ -77,7 +85,9 @@ const authenticateUserController = {
                 throw new Error("No user exists with this email")
             }
 
-            let passwordValidated = bcrypt.compareSync(checkPassword, userFound.pass)
+            // Check if login was made with a google account
+            const pass = checkPassword === "LOGIN_by_GOOGLE_2023" ? "Auth_by_Google_Oauth2!" : checkPassword
+            let passwordValidated = bcrypt.compareSync(pass, userFound.pass)
 
             if (!passwordValidated) {
                 throw new Error("The email/password is incorrect")

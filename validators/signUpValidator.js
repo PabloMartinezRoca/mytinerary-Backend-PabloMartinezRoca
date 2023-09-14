@@ -13,6 +13,7 @@ const complexityOptions = {
 
 const currentDate = new Date()
 
+console.log(joi.object)
 const signUpSchema = joi.object({
     email: joi.string().required().email().messages({
         'string.base': 'Email should be a valid string.',
@@ -44,13 +45,14 @@ const signUpSchema = joi.object({
         'date.base': 'Date of birth should be a valid date.',
         'date.max': 'Date of birth cannot be in the future.',
     }),
-    country: joi.string().required().messages({
+    country: joi.string().messages({
         'string.base': 'Country should be a valid string.',
     }),
     photo: joi.string().messages({
         'string.base': 'Photo should be a valid string.',
     }),
-    memberSince: joi.date().required().messages({
+    googleAccount: joi.boolean(),
+    memberSince: joi.date().messages({
         'date.base': 'Member since should be a valid date.',
         'any.required': 'Member since is required.',
     }),

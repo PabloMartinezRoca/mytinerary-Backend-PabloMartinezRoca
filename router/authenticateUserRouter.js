@@ -10,8 +10,8 @@ const authenticateUserRouter = Router()
 
 const { loginWithToken, signIn, signUp } = authenticateUserController
 
-authenticateUserRouter.get('/', dataValidator(signInSchema), signIn )
-authenticateUserRouter.post('/', dataValidator(signUpSchema), emailExists, signUp )
+authenticateUserRouter.post('/login', dataValidator(signInSchema), signIn )
+authenticateUserRouter.post('/register', dataValidator(signUpSchema), emailExists, signUp )
 authenticateUserRouter.get('/token/', passport.authenticate('jwt', { session: false }), loginWithToken)
 
 export default authenticateUserRouter 
